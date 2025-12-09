@@ -124,7 +124,7 @@ export async function googleOAuthController(req: any, res: any) {
     if (!user.googleId) {
       user = await prisma.user.update({
         where: { email },
-        data: { googleId, profileImage: picture, lastLoginAt: new Date() },
+        data: { googleId, lastLoginAt: new Date() },
       });
     } else {
       await prisma.user.update({
@@ -141,7 +141,6 @@ export async function googleOAuthController(req: any, res: any) {
       name: `${user.firstName} ${user.lastName}`,
       role: user.role,
       email: user.email,
-      picture: user.profileImage,
     });
   } catch (err: any) {
     console.error('Google OAuth error:', err);

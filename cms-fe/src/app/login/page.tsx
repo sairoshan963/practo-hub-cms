@@ -61,9 +61,6 @@ export default function LoginPage() {
       localStorage.setItem("role", data.role);
       localStorage.setItem("name", data.name);
       localStorage.setItem("email", data.email);
-      if (data.picture) {
-        localStorage.setItem("picture", data.picture);
-      }
 
       // Redirect based on role
       router.push(`/${data.role.toLowerCase()}/dashboard`);
