@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  AGENCY_POC
+  MEDICAL_REVIEWER
+  BRAND_REVIEWER
+  DOCTOR_REVIEWER
+  DOCTOR_CREATOR
+  APPROVER
+  PUBLISHER
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+model User {
+  id            String      @id @default(uuid())
+  email         String      @unique
+  password      String
+  firstName     String      @map("first_name")
+  lastName      String      @map("last_name")
+  role          Role
+  status        UserStatus  @default(ACTIVE)
+  specialty     String?
+  city          String?
+  profileImage  String?     @map("profile_image")
+  googleId      String?     @unique @map("google_id")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+  lastLoginAt   DateTime?   @map("last_login_at")
+
+  @@map("User")
+}
