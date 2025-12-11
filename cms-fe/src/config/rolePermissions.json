@@ -1,0 +1,65 @@
+{
+  "SUPER_ADMIN": [
+    "create_user",
+    "edit_user",
+    "deactivate_user",
+    "assign_role",
+    "view_logs",
+    "view_analytics",
+    "force_move_workflow",
+    "unlock_content"
+  ],
+  "MEDICAL_REVIEWER": [
+    "assign_topic",
+    "review_script",
+    "comment_script",
+    "approve_script",
+    "reject_script",
+    "review_video",
+    "comment_video",
+    "approve_video",
+    "reject_video",
+    "view_script_versions",
+    "view_doctor_profiles"
+  ],
+  "BRAND_REVIEWER": [
+    "review_script",
+    "comment_script",
+    "approve_script",
+    "reject_script",
+    "review_video",
+    "comment_video",
+    "approve_video",
+    "reject_video"
+  ],
+  "DOCTOR_CREATOR": [
+    "upload_pointers",
+    "approve_script",
+    "request_script_changes",
+    "approve_video",
+    "request_video_changes",
+    "view_own_content"
+  ],
+  "AGENCY_POC": [
+    "view_assigned_topics",
+    "view_doctor_notes",
+    "upload_script",
+    "upload_script_revision",
+    "upload_video"
+  ],
+  "CONTENT_APPROVER": [
+    "approve_script",
+    "reject_script",
+    "approve_video",
+    "reject_video",
+    "view_approval_chain"
+  ],
+  "VIEWER": [
+    "view_content",
+    "comment"
+  ],
+  "PUBLISHER": [
+    "publish_content",
+    "edit_metadata"
+  ]
+}

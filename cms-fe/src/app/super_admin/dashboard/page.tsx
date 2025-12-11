@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import { hasPermission } from "@/utils/permissions";
 
 export default function SuperAdminDashboard() {
   const router = useRouter();
@@ -23,35 +24,39 @@ export default function SuperAdminDashboard() {
           Welcome, {userName} - {userRole} 🎉
         </div>
         <div className="mt-4 space-x-4">
+          {hasPermission('create_user') && (
+            <button
+              onClick={() => router.push("/super_admin/add-user")}
+              className="text-white bg-green-600 px-4 py-2 rounded inline-block"
+            >
+              Add New User
+            </button>
+          )}
+          
+          {hasPermission('view_analytics') && (
+            <button
+              onClick={() => router.push("/super_admin/users")}
+              className="text-white bg-purple-600 px-4 py-2 rounded inline-block"
+            >
+              Manage Users
+            </button>
+          )}
+          
+
+          
           <button
-            onClick={() => router.push("/super_admin/add-user")}
-            className="text-white bg-green-600 px-4 py-2 rounded inline-block"
-          >
-            ➕ Add New User
-          </button>
-          <button
-            onClick={() => router.push("/super_admin/users")}
-            className="text-white bg-purple-600 px-4 py-2 rounded inline-block"
-          >
-            👥 Manage Users
-          </button>
-          <button
-            onClick={() => router.push("/set-password")}
+            onClick={() => router.push("/profile")}
             className="text-white bg-blue-600 px-4 py-2 rounded inline-block"
           >
-            🔑 Set Password
+            Profile
           </button>
-          <button
-            onClick={() => router.push("/change-password")}
-            className="text-white bg-indigo-600 px-4 py-2 rounded inline-block"
-          >
-            🔐 Change Password
-          </button>
+          
           <button
             onClick={() => {
               localStorage.removeItem("token");
               localStorage.removeItem("role");
               localStorage.removeItem("name");
+              localStorage.removeItem("permissions");
               window.location.href = "/login";
             }}
             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"

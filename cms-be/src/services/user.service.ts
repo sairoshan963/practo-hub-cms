@@ -1,12 +1,13 @@
 import prisma from "../prisma/client.js";
 import bcrypt from "bcrypt";
+import { Role } from "../generated/prisma/index.js";
 
 export async function createUserService(
   firstName: string,
   lastName: string,
   email: string,
   password: string,
-  role: string,
+  role: Role,
   specialty?: string,
   city?: string
 ) {
@@ -27,8 +28,8 @@ export async function createUserService(
       email,
       password: hashedPassword,
       role,
-      specialty: role === "DOCTOR_CREATOR" ? specialty : null,
-      city: role === "DOCTOR_CREATOR" ? city : null,
+      specialty: role === "DOCTOR_CREATOR" ? specialty! : null,
+      city: role === "DOCTOR_CREATOR" ? city! : null,
     }
   });
 

@@ -24,16 +24,10 @@ export default function DoctorCreatorDashboard() {
         </div>
         <div className="mt-4 space-x-4">
           <button
-            onClick={() => router.push("/set-password")}
+            onClick={() => router.push("/profile")}
             className="text-white bg-blue-600 px-4 py-2 rounded inline-block"
           >
-            🔑 Set Password
-          </button>
-          <button
-            onClick={() => router.push("/change-password")}
-            className="text-white bg-indigo-600 px-4 py-2 rounded inline-block"
-          >
-            🔐 Change Password
+            Profile
           </button>
           <button
             onClick={() => {

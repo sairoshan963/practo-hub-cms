@@ -29,10 +29,14 @@ export default function LoginPage() {
         return;
       }
 
-      // store token + role + name
+      // store token + role + name + email + permissions
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
       localStorage.setItem("name", data.name);
+      localStorage.setItem("email", data.email);
+      if (data.permissions) {
+        localStorage.setItem("permissions", JSON.stringify(data.permissions));
+      }
 
       // redirect based on role
       router.push(`/${data.role.toLowerCase()}/dashboard`);
@@ -60,7 +64,12 @@ export default function LoginPage() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
       localStorage.setItem("name", data.name);
-      localStorage.setItem("email", data.email);
+      if (data.email) {
+        localStorage.setItem("email", data.email);
+      }
+      if (data.permissions) {
+        localStorage.setItem("permissions", JSON.stringify(data.permissions));
+      }
 
       // Redirect based on role
       router.push(`/${data.role.toLowerCase()}/dashboard`);

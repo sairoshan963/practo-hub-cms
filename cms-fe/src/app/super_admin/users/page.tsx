@@ -34,6 +34,8 @@ export default function ManageUsersPage() {
     "PUBLISHER",
   ];
 
+  const statuses = ["ACTIVE", "INACTIVE", "SUSPENDED"];
+
   async function fetchUsers() {
     const token = localStorage.getItem("token");
     const res = await fetch("http://localhost:5000/api/users", {
@@ -46,15 +48,15 @@ export default function ManageUsersPage() {
     setLoading(false);
   }
 
-  async function toggleStatus(userId: string) {
+  async function updateStatus(userId: string, newStatus: string) {
     const token = localStorage.getItem("token");
-    const res = await fetch("http://localhost:5000/api/users/toggle-status", {
+    const res = await fetch("http://localhost:5000/api/users/update-status", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + token,
       },
-      body: JSON.stringify({ userId }),
+      body: JSON.stringify({ userId, newStatus }),
     });
     const data = await res.json();
     if (data.success) {
@@ -188,6 +190,8 @@ export default function ManageUsersPage() {
                         className={`px-3 py-1 rounded-full text-xs font-semibold ${
                           user.status === "ACTIVE"
                             ? "bg-green-100 text-green-800"
+                            : user.status === "SUSPENDED"
+                            ? "bg-yellow-100 text-yellow-800"
                             : "bg-red-100 text-red-800"
                         }`}
                       >
@@ -199,16 +203,17 @@ export default function ManageUsersPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex gap-2">
-                        <button
-                          onClick={() => toggleStatus(user.id)}
-                          className={`px-3 py-1 rounded text-xs ${
-                            user.status
-                              ? "bg-red-500 hover:bg-red-600"
-                              : "bg-green-500 hover:bg-green-600"
-                          } text-white`}
+                        <select
+                          value={user.status}
+                          onChange={(e) => updateStatus(user.id, e.target.value)}
+                          className="border px-2 py-1 rounded text-xs text-gray-800"
                         >
-                          {user.status ? "Deactivate" : "Activate"}
-                        </button>
+                          {statuses.map((status) => (
+                            <option key={status} value={status}>
+                              {status}
+                            </option>
+                          ))}
+                        </select>
                         <select
                           value={user.role}
                           onChange={(e) => updateRole(user.id, e.target.value)}

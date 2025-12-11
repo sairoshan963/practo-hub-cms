@@ -3,6 +3,7 @@ import { validateUser, generateToken } from "../services/auth.service.js";
 import prisma from "../prisma/client.js";
 import bcrypt from "bcrypt";
 import { OAuth2Client } from "google-auth-library";
+import { getUserPermissions, type Role } from "../middlewares/checkPermission.js";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -19,11 +20,15 @@ export async function loginController(req: Request, res: Response) {
     }
 
     const token = generateToken({ userId: user.id, role: user.role, email: user.email });
+    const permissions = getUserPermissions(user.role as Role);
+    
     return res.json({ 
       success: true, 
       token, 
       role: user.role, 
-      name: `${user.firstName} ${user.lastName}` 
+      name: `${user.firstName} ${user.lastName}`,
+      email: user.email,
+      permissions
     });
   } catch (err) {
     console.error('Login error:', err);
@@ -96,9 +101,14 @@ export async function googleOAuthController(req: any, res: any) {
       return res.status(400).json({ success: false, message: "Token is required" });
     }
 
+    const googleClientId = process.env.GOOGLE_CLIENT_ID;
+    if (!googleClientId) {
+      return res.status(500).json({ success: false, message: "Google OAuth not configured" });
+    }
+
     const ticket = await client.verifyIdToken({
       idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID,
+      audience: googleClientId,
     });
 
     const payload = ticket.getPayload();
@@ -106,7 +116,7 @@ export async function googleOAuthController(req: any, res: any) {
       return res.status(401).json({ success: false, message: "Invalid token" });
     }
 
-    const { sub: googleId, email, picture } = payload;
+    const { sub: googleId, email } = payload;
 
     let user = await prisma.user.findUnique({ where: { email } });
 
@@ -134,6 +144,7 @@ export async function googleOAuthController(req: any, res: any) {
     }
 
     const jwtToken = generateToken({ userId: user.id, role: user.role, email: user.email });
+    const permissions = getUserPermissions(user.role as Role);
 
     return res.json({
       success: true,
@@ -141,6 +152,7 @@ export async function googleOAuthController(req: any, res: any) {
       name: `${user.firstName} ${user.lastName}`,
       role: user.role,
       email: user.email,
+      permissions
     });
   } catch (err: any) {
     console.error('Google OAuth error:', err);
